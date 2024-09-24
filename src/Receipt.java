@@ -1,31 +1,23 @@
-import java.util.*;
+import java.util.List;
 
 public class Receipt {
     private List<Item> items;
-    private double totalSalesTaxes;
-    private double totalPrice;
+    private double totalSalesTax;
+    private double totalCost;
 
-    public Receipt() {
-        items = new ArrayList<>();
-        totalSalesTaxes = 0;
-        totalPrice = 0;
-    }
-
-    public void addItem(Item item) {
-        double tax = TaxCalculator.calculateTax(item);
-        double itemTotalPrice = item.getPrice() + tax;
-
-        items.add(item);
-        totalSalesTaxes += tax;
-        totalPrice += itemTotalPrice;
+    public Receipt(List<Item> items, double totalSalesTax, double totalCost) {
+        this.items = items;
+        this.totalSalesTax = totalSalesTax;
+        this.totalCost = totalCost;
     }
 
     public void printReceipt() {
         for (Item item : items) {
-            double tax = TaxCalculator.calculateTax(item);
-            System.out.printf("%s: %.2f%n", item.getName(), item.getPrice() + tax);
+            double itemTax = TaxCalculator.calculateTax(item);
+            double finalPrice = item.getPrice() + itemTax;
+            System.out.println(item.getName() + ": " + String.format("%.2f", finalPrice));
         }
-        System.out.printf("Sales Taxes: %.2f%n", totalSalesTaxes);
-        System.out.printf("Total: %.2f%n", totalPrice);
+        System.out.println("Sales Taxes: " + String.format("%.2f", totalSalesTax));
+        System.out.println("Total: " + String.format("%.2f", totalCost));
     }
 }

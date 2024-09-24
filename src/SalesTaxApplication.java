@@ -1,38 +1,19 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class SalesTaxApplication {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Receipt receipt = new Receipt();
+        ShoppingBasket basket = new ShoppingBasket();
 
-        System.out.println("Enter your items (type 'done' to finish):");
+        System.out.println("Enter the items (type 'done' to finish):");
+
         while (true) {
             String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("done")) {
-                break;
-            }
-
-            String[] parts = input.split(" at ");
-            String itemName = parts[0];
-            double price = Double.parseDouble(parts[1]);
-
-            boolean isImported = itemName.toLowerCase().contains("imported");
-            boolean isTaxExempt = isTaxExempt(itemName);
-
-            Item item = new Item(itemName, price, isImported, isTaxExempt);
-            receipt.addItem(item);
+            if (input.equals("done")) break;
+            basket.addItem(InputParser.parseItem(input));
         }
 
+        Receipt receipt = ReceiptGenerator.generateReceipt(basket);
         receipt.printReceipt();
-    }
-
-    private static boolean isTaxExempt(String itemName) {
-        String[] exemptItems = {"book", "chocolate", "pill"};
-        for (String exemptItem : exemptItems) {
-            if (itemName.toLowerCase().contains(exemptItem)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
